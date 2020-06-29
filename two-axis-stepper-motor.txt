@@ -1,0 +1,38 @@
+#include <Stepper.h>
+
+int stepsx=200;
+int StepsxForReading=0;
+int stepsy=48;
+int StepsyForReading=0;
+int read;
+int rotation;
+
+Stepper stepperx(stepsx, 8,9,10,11);
+Stepper steppery(stepsy, 4,5,6,7);
+
+int MotorSpeed;
+void setup()
+  {
+    pinMode (A0, INPUT);
+    stepperx.setSpeed(30);
+    pinMode (A1, INPUT);
+    steppery.setSpeed(30);
+  }
+ 
+void loop(){
+  read=analogRead(A0);
+  MotorSpeed=abs(map(read, 0, 1023, -20, 20))*10;
+  if (MotorSpeed>10){
+    rotation = read>511?1:-1;
+    stepperx.setSpeed(MotorSpeed);
+    stepperx.step(rotation*5);
+  }
+  
+  read=analogRead(A1);
+  MotorSpeed=abs(map(read, 0, 1023, -20, 20))*10;
+  if (MotorSpeed>10){
+    rotation = read>511?1:-1;
+    steppery.setSpeed(MotorSpeed);
+    steppery.step(rotation*5);
+  }
+}
